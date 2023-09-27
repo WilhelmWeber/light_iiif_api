@@ -25,12 +25,12 @@ const streamResolver = (params: {id: string, baseUrl: string}) => {
 //3.urlおわりがidになっているものがくれば、info.jsonをパラメーターに付け加えてリクエスト
 const imageAPI = async (req: express.Request, res: express.Response) => {
     //res.set({ 'Access-Control-Allow-Origin': '*' });
-    const base_uri: string = process.env.BASE_URI || "localhost:3000"
+    const base_uri: string = process.env.BASE_URI || "http://localhost:3000"
     if (req.params?.filename==null) {
       req.params.filename = 'info.json';
     }
     try {
-      const url: string = `http://localhost:3000/api${req.path}`
+      const url: string = `${base_uri}/api${req.path}`
         const processor = new IIIF.Processor(url, streamResolver,
           {
             iiifVersion: 2,
@@ -53,10 +53,10 @@ const imageAPI = async (req: express.Request, res: express.Response) => {
 
 router.get('/presentation/2/:id/manifest.json', function(req: express.Request, res:express.Response){
     //res.set({ 'Access-Control-Allow-Origin': '*' });
-    const base_uri: string = process.env.BASE_URI || "localhost:3000"
+    const base_uri: string = process.env.BASE_URI || "http://localhost:3000"
     const manifest_id: string = req.params.id;
     const base_presentation_uri: string = `http://${base_uri}/api/presentation/2`;
-    const base_image_uri: string = `http://${base_uri}/api/iiif/2`;
+    const base_image_uri: string = `${base_uri}/api/iiif/2`;
     let canvases: {}[] = [];
     images
      .find({manifest_id:manifest_id})
