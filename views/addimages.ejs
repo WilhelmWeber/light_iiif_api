@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>test</title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        <label>画像のタイトル</label>
+        <br>
+        <input type="text" name="title" placefolder="タイトル" required/>
+        <br>
+        <label>年代</label>
+        <br>
+        <input type="text" name="date" placefolder="年代"/>
+        <br>
+        <label>作者</label>
+        <br>
+        <input type="text" name="author" placefolder="作者"/>
+        <br>
+        <label>所蔵先</label>
+        <br>
+        <input type="text" name="belongs-to" placefolder="所蔵先"/>
+        <br>
+        <label>ページ数</label>
+        <br>
+        <input type="number" name="page_num" placefolder="ページ数"/>
+        <br>
+        <label>概要</label>
+        <br>
+        <input type="text" name="description" placefolder="概要"/>
+        <br>
+        <label>分野</label>
+        <br>
+        <input type="text" name="type" placefolder="分野"/>
+        <br>
+        <label>フォーマット</label>
+        <br>
+        <input type="text" name="format" placefolder="フォーマット"/>
+        <br>
+        <input type="file" name="image" accept="image/*">
+        <br>
+        <br>
+        <input type="submit" value="追加">
+    </form>
+</body>
+</html>

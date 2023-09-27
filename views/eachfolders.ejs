@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title><%= manifest_id %></title>
+</head>
+<body>
+    <%- include('./header2'); %>
+    <div id="app">
+    <div class="container">
+    <h2>Images in <%= manifest_id %></h2>
+    <form action="" method="POST" enctype="multipart/form-data">
+        <label>画像の追加</label>
+        <br>
+        <input reqired type="file" name="filename" accept="image/*">
+        <br>
+        <br>
+        <input class="btn btn-primary" type="submit" value="画像を追加する">
+        <br>
+    </form>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>画像サムネ</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < results.length; i++) { %>
+                <tr>
+                  <td><%= i+1 %></td>
+                  <td><img src="/uploads/<%= results[i].name %>" alt="image" width="150" height="200"></td>
+                  <td><a roll="button" href="/content/<%= manifest_id %>/deleteImage/<%= results[i]._id.toString() %>">この画像を削除する</a></td>
+                </tr>
+            <% } %>
+        </tbody>
+    </div>
+    </div>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

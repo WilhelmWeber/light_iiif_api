@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>test</title>
+</head>
+<body>
+    <%- include('./header1'); %>
+    <div class="container">
+    <form action="" method="POST">
+        <label>タイトル</label>
+        <br>
+        <input class="form-control" id="inputdefault" required type="text" name="label" value="<%= manifest.label %>" placefolder="タイトル"/>
+        <br>
+        <label>ライセンス(URLで入力)</label>
+        <br>
+        <input class="form-control" id="inputdefault" required type="text" name="license" value="<%= manifest.license %>" placefolder="ライセンス"/>
+        <br>
+        <label>帰属</label>
+        <br>
+        <input class="form-control" id="inputdefault"  required type="text" name="attribution" value="<%= manifest.attribution %>" placefolder="帰属"/>
+        <br>
+        <label>鑑賞方向</label>
+        <br>
+        <input class="form-control" id="inputdefault" required type="text" name="viewingDirection" value="<%= manifest.viewingDirection %>" placefolder="所蔵先"/>
+        <br>
+        <label>概要</label>
+        <br>
+        <input class="form-control" id="inputdefault" required type="text" name="discription" value="<%= manifest.discription %>" placefolder="概要"/>
+        <br>
+        <label>鑑賞のためのヒント</label>
+        <br>
+        <input class="form-control" id="inputdefault" required type="text" name="viewingHint" value="<%= manifest.viewingHint %>" placefolder="鑑賞のためのヒント"/>
+        <br>
+        <label>ロゴ(URL)</label>
+        <br>
+        <input class="form-control" id="inputdefault" type="text" name="logo" value="<%= manifest.logo %>" placefolder="鑑賞のためのヒント"/>
+        <br>
+        <label>他に参照するもの</label>
+        <br>
+        <input class="form-control" id="inputdefault" type="text" name="seeAlso" value="<%= manifest.seeAlso %>" placefolder="鑑賞のためのヒント"/>
+        <br>
+        <br>
+        <input class="btn btn-primary" type="submit" value="更新">
+    </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>
