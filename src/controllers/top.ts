@@ -311,8 +311,10 @@ router.get('/content/:manifest_id/deleteImage/:imageId', (req: express.Request, 
 
 router.get('/viewer/:id/', function(req: express.Request, res: express.Response){
   //res.set({ 'Access-Control-Allow-Origin': '*' });
+  const base_uri = process.env.BASE_URI || "http://localhost:3000";
   const manifest_id: string = req.params.id
-  res.render('./universalViewer.ejs', {manifest_name:manifest_id});
+  const manifest_uri = `${base_uri}/api/presentation/2/${manifest_id}`
+  res.render('./universalViewer.ejs', {manifest_uri:manifest_uri});
 });
 
 export default router;
