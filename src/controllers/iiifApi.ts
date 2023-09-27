@@ -55,7 +55,7 @@ router.get('/presentation/2/:id/manifest.json', function(req: express.Request, r
     //res.set({ 'Access-Control-Allow-Origin': '*' });
     const base_uri: string = process.env.BASE_URI || "http://localhost:3000"
     const manifest_id: string = req.params.id;
-    const base_presentation_uri: string = `http://${base_uri}/api/presentation/2`;
+    const base_presentation_uri: string = `${base_uri}/api/presentation/2`;
     const base_image_uri: string = `${base_uri}/api/iiif/2`;
     let canvases: {}[] = [];
     images
