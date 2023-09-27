@@ -317,4 +317,9 @@ router.get('/viewer/:id/', function(req: express.Request, res: express.Response)
   res.render('./universalViewer.ejs', {manifest_uri:manifest_uri});
 });
 
+router.get('/logout', (req: express.Request, res: express.Response) => {
+  req.session = null;
+  res.redirect('/');
+});
+
 export default router;
