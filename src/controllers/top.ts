@@ -6,6 +6,8 @@ import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import sharp from 'sharp';
+import { StorageReference, ref, uploadBytes, deleteObject } from 'firebase/storage';
+import firebasestorage from '../firebase/firebaseconfig';
 
 //multerの設定用（どのフォルダにどんなファイル名で保存するか）
 const storage: multer.StorageEngine = multer.diskStorage({
@@ -102,12 +104,16 @@ router.get('/delete/:id', async (req: express.Request, res: express.Response) =>
   const manifest_id: string = req.params.id;
 
   const imagesDestory: (value: any) => Promise<void> = async (value: any) => {
-    fs.unlink(path.resolve(__dirname, '../../public/uploads', value.name), (err) => {
-      if (err) throw err;
-    });
-    fs.unlink(path.resolve(__dirname, '../../public/tif_images', value.output_name), (err) => {
-      if (err) throw err;
-    })
+    fs.unlinkSync(path.resolve(__dirname, '../../public/uploads', value.name));
+    fs.unlinkSync(path.resolve(__dirname, '../../public/tif_images', value.output_name));
+    const uploadDelete = deleteObject(ref(firebasestorage, `uploads/${value.name}`));
+    const tifDelete = deleteObject(ref(firebasestorage, `tif_images/${value.output_name}`));
+    Promise
+      .all([uploadDelete, tifDelete])
+      .then(() => {
+        return;
+      })
+      .catch((err: any) => console.log(err));
   };
 
   if (!isAuth) {
@@ -232,6 +238,21 @@ router.post('/content/:id', upload.single('filename'), function(req: express.Req
   //res.set({ 'Access-Control-Allow-Origin': '*' });
   const userId: string | undefined = req.session.userId;
   const isAuth: boolean = Boolean(userId);
+
+  const firebaseupload = async (name: string, output_name: string) => {
+    const uploadRef: StorageReference = ref(firebasestorage, `uploads/${name}`);
+    const tifRef: StorageReference = ref(firebasestorage, `tif_images/${output_name}`);
+    const uploadBuffer: Buffer = fs.readFileSync(path.resolve(__dirname, '../../public/uploads', name));
+    const tifBuffer: Buffer = fs.readFileSync(path.resolve(__dirname, '../../public/tif_images', output_name));
+
+    const uploadUpload = uploadBytes(uploadRef, uploadBuffer);
+    const tifUpload = uploadBytes(tifRef, tifBuffer);
+
+    Promise
+      .all([uploadUpload, tifUpload])
+      .then(() => console.log('Firebaseへのバックアップが完了しました'))
+      .catch((err: any) => console.log(err));
+  };
   
   if (!isAuth) { 
     res.redirect('/signin') 
@@ -253,27 +274,30 @@ router.post('/content/:id', upload.single('filename'), function(req: express.Req
         .toFile(output)
         .then(function(){
           console.log('画像の変換に成功しました');
+          const imagesCreate = images.create({
+            name:name,
+            manifest_id:manifest_id,
+            format:format,
+            width:width,
+            height:height,
+            output_name:output_name
+          });
+          const upload = firebaseupload(name ? name: '', output_name);
+          Promise
+            .all([imagesCreate, upload])
+            .then(() => {
+              console.log('画像の登録処理が終わりました');
+              res.status(200);
+              res.redirect(`/content/${manifest_id}`)
+            })
+            .catch((err: any) => {
+              res.status(500).send(err.toString());
+              res.redirect(`/content/${manifest_id}`);  
+            })
         })
         .catch(function(err:string){
           res.status(500).send(err.toString());
           res.redirect(`/content/${manifest_id}`);
-        });
-      images.create({
-        name:name,
-        manifest_id:manifest_id,
-        format:format,
-        width:width,
-        height:height,
-        output_name:output_name
-      })
-        .then(() => {
-          console.log('画像の登録が完了しました');
-          res.status(200);
-          res.redirect(`/content/${manifest_id}`);
-        })
-        .catch((err: Error) => {
-          res.status(500).send(err.toString());
-          res.redirect(`/content/${manifest_id}`);   
         });
     });
   }
@@ -281,17 +305,21 @@ router.post('/content/:id', upload.single('filename'), function(req: express.Req
 });
 
 router.get('/content/:manifest_id/deleteImage/:imageId', (req: express.Request, res: express.Response) => {
-  const imageDelete: (imageId: string) => Promise<void> = async(imageId: string) => {
+  const imageDelete: (imageId: string) => Promise<void> = async (imageId: string) => {
     images
       .findById(imageId)
       .then((value: any) => {
-        fs.unlink(path.resolve(__dirname, '../../public/uploads', value.name), (err) => {
-          if (err) throw err;
-        });
-        fs.unlink(path.resolve(__dirname, '../../public/tif_images', value.output_name), (err) => {
-          if (err) throw err;
-        });
-      })
+        fs.unlinkSync(path.resolve(__dirname, '../../public/uploads', value.name));
+        fs.unlinkSync(path.resolve(__dirname, '../../public/tif_images', value.output_name));
+        const uploadDelete = deleteObject(ref(firebasestorage, `uploads/${value.name}`));
+        const tifDelete = deleteObject(ref(firebasestorage, `tif_images/${value.output_name}`));
+        Promise
+          .all([uploadDelete, tifDelete])
+          .then(() => {
+            return;
+          })
+          .catch((err: any) => console.log(err));
+      });
   };
 
   const imageId: string = req.params.imageId;
@@ -318,7 +346,9 @@ router.get('/viewer/:id/', function(req: express.Request, res: express.Response)
 });
 
 router.get('/logout', (req: express.Request, res: express.Response) => {
-  req.session = null;
+  req.session.destroy((err: any) => {
+    console.log(err);
+  });
   res.redirect('/');
 });
 
